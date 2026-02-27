@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bilingual News Monitoring Automation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📰 Bilingual News Monitoring Automation</h1>
+            <p class="subtitle">Search and collect news from multiple websites automatically</p>
+        </header>
+
+        <main>
+            <div class="control-panel">
+                <div class="control-section">
+                    <h2>Control Panel</h2>
+                    
+                    <div class="button-group">
+                        <button id="runBtn" class="btn btn-primary" onclick="startCollection()">
+                            <span class="icon">▶</span> Run Collection
+                        </button>
+                        <button id="resetBtn" class="btn btn-secondary" onclick="resetStatus()">
+                            <span class="icon">↻</span> Reset
+                        </button>
+                    </div>
+                </div>
+
+                <div class="status-section">
+                    <h2>Status</h2>
+                    
+                    <div class="status-display">
+                        <div class="status-item">
+                            <span class="label">State:</span>
+                            <span id="statusText" class="value">Idle</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="label">Progress:</span>
+                            <span id="progressPercent" class="value">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="progress-bar-container">
+                        <div id="progressBar" class="progress-bar" style="width: 0%"></div>
+                    </div>
+
+                    <div class="message-display">
+                        <p id="messageText" class="message-content">Ready to start</p>
+                    </div>
+                </div>
+
+                <div class="results-section">
+                    <h2>Results</h2>
+                    
+                    <div id="resultsContent">
+                        <p class="placeholder">Results will appear here after completion</p>
+                    </div>
+                </div>
+
+                <div class="error-section" id="errorSection" style="display: none;">
+                    <h2>⚠️ Error</h2>
+                    <div class="error-content">
+                        <p id="errorText"></p>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h2>ℹ️ Information</h2>
+                    <ul>
+                        <li><strong>Keywords Source:</strong> Google Sheet (Hindi & English)</li>
+                        <li><strong>Websites Source:</strong> Google Sheet (Hindi & English)</li>
+                        <li><strong>Output Format:</strong> Google Document with clickable links</li>
+                        <li><strong>Deduplication:</strong> URL, title, and similarity-based</li>
+                        <li><strong>Language Support:</strong> English & Hindi</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Bilingual News Monitoring Automation v1.0</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{% extends 'rental/base.html' %}
+{% block content %}
+<h1>{% if listing %}Edit Listing{% else %}New Listing{% endif %}</h1>
+<form class="form" method="post">
+    <label>Title<input type="text" name="title" value="{{ listing['title'] if listing else '' }}" required></label>
+    <label>City<input type="text" name="city" value="{{ listing['city'] if listing else '' }}" required></label>
+    <label>State/Region<input type="text" name="state" value="{{ listing['state'] if listing and listing['state'] is not none else '' }}"></label>
+    <label>Country<input type="text" name="country" value="{{ listing['country'] if listing and listing['country'] else 'India' }}" required></label>
+    <label>Address<input type="text" name="address" value="{{ listing['address'] if listing else '' }}" required></label>
+    <label>Space Type
+        <select name="space_type" required>
+            {% set selected_type = listing['space_type'] if listing else '' %}
+            {% for t in ['Apartment', 'Office', 'Shop', 'Warehouse', 'Studio', 'Villa'] %}
+            <option value="{{ t }}" {% if selected_type == t %}selected{% endif %}>{{ t }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <label>Price Per Day (USD)<input type="number" step="0.01" name="price_per_day" value="{{ listing['price_per_day'] if listing else '' }}" required></label>
+    <label>Cleaning Fee (USD)<input type="number" step="0.01" min="0" name="cleaning_fee" value="{{ listing['cleaning_fee'] if listing and listing['cleaning_fee'] is not none else '0' }}" required></label>
+    <label>Max Guests<input type="number" min="1" name="max_guests" value="{{ listing['max_guests'] if listing and listing['max_guests'] is not none else '1' }}" required></label>
+    <label>Minimum Stay (days)<input type="number" min="1" name="min_stay_days" value="{{ listing['min_stay_days'] if listing and listing['min_stay_days'] is not none else '1' }}" required></label>
+    <label>Description<textarea name="description" rows="5" required>{{ listing['description'] if listing else '' }}</textarea></label>
+    <label>Amenities (comma separated)<input type="text" name="amenities" value="{{ listing['amenities'] if listing and listing['amenities'] is not none else '' }}" placeholder="WiFi, Parking, Kitchen, AC"></label>
+    <label>Image URL<input type="url" name="image_url" value="{{ listing['image_url'] if listing and listing['image_url'] is not none else '' }}" placeholder="https://..."></label>
+    <label>Virtual Tour URL (YouTube/Matterport)<input type="url" name="virtual_tour_url" value="{{ listing['virtual_tour_url'] if listing and listing['virtual_tour_url'] is not none else '' }}" placeholder="https://..."></label>
+    <label>Latitude<input type="number" step="0.000001" name="latitude" value="{{ listing['latitude'] if listing and listing['latitude'] is not none else '' }}" placeholder="28.6139"></label>
+    <label>Longitude<input type="number" step="0.000001" name="longitude" value="{{ listing['longitude'] if listing and listing['longitude'] is not none else '' }}" placeholder="77.2090"></label>
+    <label class="checkbox"><input type="checkbox" name="available" {% if not listing or listing['available'] %}checked{% endif %}> Available for booking</label>
+    <button type="submit">Save</button>
+</form>
+{% endblock %}

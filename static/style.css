@@ -1,0 +1,370 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Header */
+header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 40px 30px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+header .subtitle {
+    font-size: 1.1em;
+    opacity: 0.95;
+    font-weight: 300;
+}
+
+/* Main Content */
+main {
+    flex: 1;
+    padding: 40px 30px;
+    overflow-y: auto;
+}
+
+/* Control Panel */
+.control-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.control-section,
+.status-section,
+.results-section,
+.error-section,
+.info-section {
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 25px;
+}
+
+.control-section h2,
+.status-section h2,
+.results-section h2,
+.error-section h2,
+.info-section h2 {
+    color: #667eea;
+    margin-bottom: 20px;
+    font-size: 1.3em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Buttons */
+.button-group {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 150px;
+    justify-content: center;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: #d0d0d0;
+}
+
+.btn .icon {
+    font-size: 1.2em;
+}
+
+/* Status Display */
+.status-display {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.status-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background: white;
+    border-radius: 4px;
+    border: 1px solid #e0e0e0;
+}
+
+.status-item .label {
+    font-weight: 600;
+    color: #667eea;
+}
+
+.status-item .value {
+    color: #333;
+    font-weight: 500;
+}
+
+/* Progress Bar */
+.progress-bar-container {
+    width: 100%;
+    height: 25px;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    transition: width 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    color: white;
+    font-weight: 600;
+    font-size: 0.85em;
+}
+
+/* Message Display */
+.message-display {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 15px;
+    min-height: 60px;
+}
+
+.message-content {
+    color: #666;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Results Section */
+.results-content {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.result-item {
+    padding: 12px;
+    border-left: 4px solid #667eea;
+    background: #f0f2ff;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+.result-label {
+    font-weight: 600;
+    color: #667eea;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.result-value {
+    color: #333;
+    word-break: break-all;
+}
+
+.result-value a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.result-value a:hover {
+    text-decoration: underline;
+}
+
+.placeholder {
+    color: #999;
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Error Section */
+.error-section {
+    border-color: #ff6b6b;
+    background: #ffe0e0;
+}
+
+.error-section h2 {
+    color: #ff6b6b;
+}
+
+.error-content {
+    background: white;
+    border: 1px solid #ff6b6b;
+    border-radius: 4px;
+    padding: 15px;
+}
+
+.error-content p {
+    color: #c92a2a;
+    word-break: break-word;
+}
+
+/* Info Section */
+.info-section ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+.info-section li {
+    padding: 12px 15px;
+    background: white;
+    border-left: 4px solid #667eea;
+    border-radius: 4px;
+    color: #333;
+}
+
+.info-section strong {
+    color: #667eea;
+}
+
+/* Footer */
+footer {
+    background: #f8f9fa;
+    border-top: 1px solid #e0e0e0;
+    padding: 20px 30px;
+    text-align: center;
+    color: #666;
+    font-size: 0.9em;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.8em;
+    }
+
+    header .subtitle {
+        font-size: 0.95em;
+    }
+
+    main {
+        padding: 20px 15px;
+    }
+
+    .control-section,
+    .status-section,
+    .results-section,
+    .error-section,
+    .info-section {
+        padding: 15px;
+    }
+
+    .status-display {
+        grid-template-columns: 1fr;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}
+
+/* Animations */
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.running {
+    animation: pulse 1.5s infinite;
+}
+
+/* Status Colors */
+.status-idle {
+    color: #999;
+}
+
+.status-running {
+    color: #667eea;
+}
+
+.status-complete {
+    color: #51cf66;
+}
+
+.status-error {
+    color: #ff6b6b;
+}

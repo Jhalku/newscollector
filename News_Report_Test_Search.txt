@@ -1,0 +1,11 @@
+News Report for 'Test Search'
+Generated on: 2026-02-27 17:05:05
+
+1. Test Article 1
+Date: Yesterday
+Link: http://example.com/1
+
+2. Test Article 2
+Date: Today
+Link: http://example.com/2
+

@@ -1,0 +1,118 @@
+{% extends 'rental/base.html' %}
+{% block content %}
+<article class="detail-card">
+    <img class="detail-image" src="{{ listing['image_url'] or 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80' }}" alt="{{ listing['title'] }}">
+    <h1>{{ listing['title'] }}</h1>
+    <p>{{ listing['city'] }}{% if listing['state'] %}, {{ listing['state'] }}{% endif %}, {{ listing['country'] }} | {{ listing['space_type'] }}</p>
+    <p><strong>Address:</strong> {{ listing['address'] }}</p>
+    <p><strong>Owner:</strong> {{ listing['owner_name'] }}</p>
+    <p><strong>Rating:</strong>
+        {% if listing['review_count'] %}
+        {{ listing['avg_rating'] }} / 5 ({{ listing['review_count'] }} reviews)
+        {% else %}
+        New listing
+        {% endif %}
+    </p>
+    <p class="price">USD {{ '%.2f'|format(listing['price_per_day']) }} / day</p>
+    <p><strong>Cleaning fee:</strong> USD {{ '%.2f'|format(listing['cleaning_fee']) }}</p>
+    <p><strong>Guest capacity:</strong> {{ listing['max_guests'] }} guests</p>
+    <p><strong>Minimum stay:</strong> {{ listing['min_stay_days'] }} day(s)</p>
+    <p>{{ listing['description'] }}</p>
+    {% set amenities = parse_amenities(listing['amenities']) %}
+    {% if amenities %}
+    <p><strong>Amenities:</strong> {{ amenities|join(' • ') }}</p>
+    {% endif %}
+    <p><strong>Status:</strong> {% if listing['available'] %}Available{% else %}Unavailable{% endif %}</p>
+    {% if listing['virtual_tour_url'] %}
+    <p><a class="btn" href="{{ listing['virtual_tour_url'] }}" target="_blank" rel="noopener noreferrer">Open Virtual Tour</a></p>
+    {% endif %}
+
+    {% if listing['latitude'] is not none and listing['longitude'] is not none %}
+    {% set min_lng = listing['longitude'] - 0.01 %}
+    {% set min_lat = listing['latitude'] - 0.01 %}
+    {% set max_lng = listing['longitude'] + 0.01 %}
+    {% set max_lat = listing['latitude'] + 0.01 %}
+    <iframe
+        class="map-frame"
+        loading="lazy"
+        src="https://www.openstreetmap.org/export/embed.html?bbox={{ min_lng }}%2C{{ min_lat }}%2C{{ max_lng }}%2C{{ max_lat }}&layer=mapnik&marker={{ listing['latitude'] }}%2C{{ listing['longitude'] }}">
+    </iframe>
+    <p><a href="https://www.google.com/maps/search/?api=1&query={{ listing['latitude'] }},{{ listing['longitude'] }}" target="_blank" rel="noopener noreferrer">Open in Google Maps</a></p>
+    {% endif %}
+
+    {% if g.user and g.user['id'] == listing['owner_id'] %}
+    <div class="actions">
+        <a class="btn" href="{{ url_for('edit_listing', listing_id=listing['id']) }}">Edit</a>
+        <form method="post" action="{{ url_for('delete_listing', listing_id=listing['id']) }}" onsubmit="return confirm('Delete this listing?');">
+            <button class="btn danger" type="submit">Delete</button>
+        </form>
+    </div>
+    {% endif %}
+</article>
+
+{% if g.user and g.user['id'] != listing['owner_id'] and listing['available'] %}
+<section class="panel">
+    <h2>Request Booking</h2>
+    <form class="form" method="post" action="{{ url_for('create_booking', listing_id=listing['id']) }}">
+        <label>Start Date<input type="date" name="start_date" required></label>
+        <label>End Date<input type="date" name="end_date" required></label>
+        <label>Message<textarea name="message" rows="3" placeholder="Any details for the owner"></textarea></label>
+        <p class="hint">Total will be calculated at request time: (days x price/day) + cleaning fee.</p>
+        <button type="submit">Send Request</button>
+    </form>
+</section>
+{% endif %}
+
+{% if g.user and g.user['id'] == listing['owner_id'] %}
+<section class="panel">
+    <h2>Incoming Requests</h2>
+    <table>
+        <thead>
+            <tr><th>Renter</th><th>Dates</th><th>Total</th><th>Status</th><th>Message</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+        {% for b in bookings %}
+            <tr>
+                <td>{{ b['renter_name'] }}</td>
+                <td>{{ b['start_date'] }} to {{ b['end_date'] }}</td>
+                <td>USD {{ '%.2f'|format(b['total_price']) }}</td>
+                <td>{{ b['status'] }}</td>
+                <td>{{ b['message'] or '-' }}</td>
+                <td>
+                    {% if b['status'] == 'pending' %}
+                    <form method="post" action="{{ url_for('update_booking_status', booking_id=b['id']) }}" class="inline-form">
+                        <button name="status" value="approved" type="submit">Approve</button>
+                        <button name="status" value="rejected" type="submit">Reject</button>
+                    </form>
+                    {% else %}-{% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="6">No requests yet.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endif %}
+
+<section class="panel">
+    <h2>Guest Reviews</h2>
+    {% if can_review %}
+    <form method="post" action="{{ url_for('add_review', listing_id=listing['id']) }}" class="form">
+        <label>Rating (1-5)<input type="number" name="rating" min="1" max="5" required></label>
+        <label>Comment<textarea name="comment" rows="3" placeholder="How was your stay?"></textarea></label>
+        <button type="submit">Submit Review</button>
+    </form>
+    {% endif %}
+
+    {% for review in reviews %}
+    <article class="review-card">
+        <p><strong>{{ review['renter_name'] }}</strong> rated {{ review['rating'] }}/5</p>
+        <p>{{ review['comment'] or 'No comment provided.' }}</p>
+        <small>{{ review['created_at'][:10] }}</small>
+    </article>
+    {% else %}
+    <p>No reviews yet.</p>
+    {% endfor %}
+</section>
+{% endblock %}

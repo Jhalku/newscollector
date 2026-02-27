@@ -1,0 +1,74 @@
+{% extends 'rental/base.html' %}
+{% block content %}
+<h1>Dashboard</h1>
+
+<section class="panel">
+    <h2>My Listings</h2>
+    <table>
+        <thead><tr><th>Title</th><th>City</th><th>Price/day</th><th>Requests</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody>
+        {% for l in my_listings %}
+        <tr>
+            <td>{{ l['title'] }}</td>
+            <td>{{ l['city'] }}</td>
+            <td>USD {{ '%.2f'|format(l['price_per_day']) }}</td>
+            <td>{{ l['approved_requests'] }}/{{ l['total_requests'] }}</td>
+            <td>{% if l['available'] %}Available{% else %}Unavailable{% endif %}</td>
+            <td><a href="{{ url_for('listing_detail', listing_id=l['id']) }}">Open</a></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6">No listings yet.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+<section class="panel">
+    <h2>Incoming Booking Requests</h2>
+    <table>
+        <thead><tr><th>Listing</th><th>Renter</th><th>Dates</th><th>Total</th><th>Status</th></tr></thead>
+        <tbody>
+        {% for b in incoming_bookings %}
+        <tr>
+            <td>{{ b['listing_title'] }}</td>
+            <td>{{ b['renter_name'] }}</td>
+            <td>{{ b['start_date'] }} to {{ b['end_date'] }}</td>
+            <td>USD {{ '%.2f'|format(b['total_price']) }}</td>
+            <td>{{ b['status'] }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5">No incoming bookings.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+<section class="panel">
+    <h2>My Booking Requests</h2>
+    <table>
+        <thead><tr><th>Listing</th><th>Owner</th><th>Dates</th><th>Total</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody>
+        {% for b in my_bookings %}
+        <tr>
+            <td>{{ b['listing_title'] }} ({{ b['city'] }})</td>
+            <td>{{ b['owner_name'] }}</td>
+            <td>{{ b['start_date'] }} to {{ b['end_date'] }}</td>
+            <td>USD {{ '%.2f'|format(b['total_price']) }}</td>
+            <td>{{ b['status'] }}</td>
+            <td>
+                {% if b['status'] == 'pending' or b['status'] == 'approved' %}
+                <form method="post" action="{{ url_for('update_booking_status', booking_id=b['id']) }}">
+                    <button name="status" value="cancelled" type="submit">Cancel</button>
+                </form>
+                {% else %}
+                -
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6">No booking requests yet.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}
