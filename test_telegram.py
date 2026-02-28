@@ -30,15 +30,15 @@ try:
     msg_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
     payload = {
         'chat_id': TELEGRAM_CHAT_ID,
-        'text': "🤖 Hello! This is a test message from your News Tracker setup script to confirm the connection works."
+        'text': "Hello! This is a test message from your News Tracker setup script to confirm the connection works."
     }
     msg_res = requests.post(msg_url, json=payload)
     print(f"Status Code: {msg_res.status_code}")
     print(f"Response: {msg_res.json()}")
     
     if msg_res.status_code == 200:
-        print("\n✅ SUCCESS! The message was sent to Telegram.")
+        print("\nSUCCESS! The message was sent to Telegram.")
     else:
-        print("\n❌ FAILED! Telegram rejected the message.")
+        print("\nFAILED! Telegram rejected the message.")
 except Exception as e:
     print(f"Error sending message: {e}")
